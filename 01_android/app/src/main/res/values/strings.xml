@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">gr2sw2024b_mams</string>
+    <string name="saludo">Hello mundo!!</string>
+    <string name="defecto">Este es un texto de ejemplo</string>
+    <color name="saludo_color">#8D2F04</color>
+    <color name="defecto_color">#000000</color>
+</resources>

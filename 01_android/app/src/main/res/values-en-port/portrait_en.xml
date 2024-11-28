@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fondo">#1B6DD6</color>
+    <string name="defecto">Port es</string>
+    <color name="defecto_color">#D0212C</color>
+</resources>

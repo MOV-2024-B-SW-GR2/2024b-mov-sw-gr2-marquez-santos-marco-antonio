@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fondo">#F39C12</color>
+    <string name="defecto">LANDSCAPE ESPAÑOL</string>
+    <color name="defecto_color">#2C3E50</color>
+</resources>
