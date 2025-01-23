@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_editar_banco"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".operacionesbanco.EditarBanco">
+
+    <Button
+        android:id="@+id/btn_editar_banco_opcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="148dp"
+        android:text="Editar banco"
+        app:layout_constraintEnd_toEndOf="@+id/input_cambiar_numero_accionistas_banco"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="@+id/input_cambiar_numero_accionistas_banco"
+        app:layout_constraintTop_toBottomOf="@+id/input_cambiar_numero_accionistas_banco" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="Editar Banco"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/input_nuevo_nombre_banco"
+        android:layout_width="247dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="52dp"
+        android:ems="10"
+        android:hint="Ingrese nuevo nombre"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/input_cambiar_numero_accionistas_banco"
+        android:layout_width="246dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="188dp"
+        android:ems="10"
+        android:hint="Ingrese número de accionistas"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/input_nuevo_nombre_banco"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input_nuevo_nombre_banco"
+        app:layout_constraintTop_toBottomOf="@+id/input_nuevo_nombre_banco" />
+
+    <CheckBox
+        android:id="@+id/cb_aumentar_accionistas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Aumentar accionistas"
+        app:layout_constraintStart_toStartOf="@+id/input_nuevo_nombre_banco"
+        app:layout_constraintTop_toBottomOf="@+id/input_nuevo_nombre_banco" />
+
+    <CheckBox
+        android:id="@+id/cb_reducir_accionistas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Reducir accionistas"
+        app:layout_constraintStart_toStartOf="@+id/cb_aumentar_accionistas"
+        app:layout_constraintTop_toBottomOf="@+id/cb_aumentar_accionistas" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
