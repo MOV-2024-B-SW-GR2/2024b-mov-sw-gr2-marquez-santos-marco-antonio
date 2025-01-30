@@ -1,5 +1,6 @@
 package com.example.gr2sw2024b_mams
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -61,6 +62,11 @@ class MainActivity : AppCompatActivity() {
         val botonGoogleMaps = findViewById<Button>(R.id.btn_google_map)
         botonGoogleMaps.setOnClickListener {
             irActividad(GGoogleMaps::class.java)
+        }
+
+        val botonAuth = findViewById<Button>(R.id.btn_intent_firebase_ui)
+        botonAuth.setOnClickListener {
+            irActividad(HFirebaseUiAuth::class.java)
         }
     }
 
