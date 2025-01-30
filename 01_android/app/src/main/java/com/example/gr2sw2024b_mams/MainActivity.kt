@@ -57,6 +57,11 @@ class MainActivity : AppCompatActivity() {
             intentExplicito.putExtra("entrenador", BEntrenador(1,"Marco","ejemplo"))
             callbackContenidoIntentExplicito.launch(intentExplicito)
         }
+
+        val botonGoogleMaps = findViewById<Button>(R.id.btn_google_map)
+        botonGoogleMaps.setOnClickListener {
+            irActividad(GGoogleMaps::class.java)
+        }
     }
 
     fun irActividad(clase:Class<*>){

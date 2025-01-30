@@ -32,10 +32,11 @@ class Banco(
         return cuentaEncontrada
     }
 
-    fun crearCuenta(nombrePropietario: String) {
+    fun crearCuenta(nombrePropietario: String):Int{
         val numeroCuenta: Int = (cuentas.maxByOrNull { it.obtenerNumeroCuenta() }?.obtenerNumeroCuenta() ?: 0) + 1
         val nuevaCuenta: Cuenta = Cuenta(numeroCuenta=numeroCuenta, propietario = nombrePropietario)
         this.cuentas.add(nuevaCuenta)
+        return numeroCuenta
     }
 
     fun transferir(numeroCuentaTransferente: Int, numeroCuentaTransferido: Int, valorATransferir: Double) {

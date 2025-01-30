@@ -10,12 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.appmanejobanco_cuenta.Banco
-import com.example.appmanejobanco_cuenta.BaseDatosMemoria
 import com.example.appmanejobanco_cuenta.R
+import com.example.appmanejobanco_cuenta.basedatos.BaseDeDatos
 import com.google.android.material.snackbar.Snackbar
 
 class CrearBanco : AppCompatActivity() {
-    val bancos = BaseDatosMemoria.arregloBancos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,19 +35,21 @@ class CrearBanco : AppCompatActivity() {
 
                 val banco: Banco = Banco (
                     nombre.text.toString(),
-                    BaseDatosMemoria.ID_BANCOS,
+                    1,
                     numeroAccionistas.text.toString().toInt(),
                     saldoInicial.text.toString().toDouble())
 
-                bancos.add(banco)
-                BaseDatosMemoria.ID_BANCOS++
-
+                BaseDeDatos.tablaBanco!!.crearBanco(banco.nombre,banco.numeroAccionistas,(banco.saldoTotal*100).toInt(),recuperarNumero(banco.enOperacion))
                 setResult(Activity.RESULT_OK)
                 finish()
             } catch (e:Exception){
                 mostrarSnackbar("Ha ocurrido un error: ${e.message}")
             }
         }
+    }
+
+    private fun recuperarNumero(enOperacion: Boolean): Int {
+        return if (enOperacion) 1 else 0
     }
 
     fun mostrarSnackbar (texto:String){

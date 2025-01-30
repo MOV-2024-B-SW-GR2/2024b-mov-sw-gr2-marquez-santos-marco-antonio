@@ -1,7 +1,6 @@
 package com.example.appmanejobanco_cuenta.operacionescuenta
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.ContextMenu
 import android.view.MenuItem
@@ -18,15 +17,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.appmanejobanco_cuenta.BaseDatosMemoria
+import com.example.appmanejobanco_cuenta.Banco
 import com.example.appmanejobanco_cuenta.Cuenta
 import com.example.appmanejobanco_cuenta.R
+import com.example.appmanejobanco_cuenta.basedatos.BaseDeDatos
 import com.google.android.material.snackbar.Snackbar
 
 class CuentaCRUD : AppCompatActivity() {
-    val bancos = BaseDatosMemoria.arregloBancos
-    var banco = bancos[0]
-    var posicionCuentaSeleccionado = -1
+    var banco: Banco? = null
+    var cuentas = arrayListOf<Cuenta>()
+    var idCuentaSeleccionado = -1
     var adaptador: ArrayAdapter<Cuenta>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,23 +39,30 @@ class CuentaCRUD : AppCompatActivity() {
             insets
         }
         val idBanco = intent.getIntExtra("idBanco", 0)
-        banco = bancos[idBanco]
+        banco = BaseDeDatos.tablaBanco!!.consultarBancoPorId(idBanco)
 
         val nombreBanco = findViewById<TextView>(R.id.tv_nombre_banco_seleccionado)
-        nombreBanco.setText(banco.nombre)
+        nombreBanco.setText(banco!!.nombre)
 
         val listView = findViewById<ListView>(R.id.lv_cuentas)
         adaptador = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1,
-            banco.cuentas
+            cuentas
         )
         listView.adapter = adaptador
-        adaptador?.notifyDataSetChanged()
+        actualizarListaCuentas()
 
-        val botonCrearBanco = findViewById<Button>(R.id.btn_crear_cuenta)
-        botonCrearBanco.setOnClickListener { crearCuenta() }
+        val botonCrearCuenta = findViewById<Button>(R.id.btn_crear_cuenta)
+        botonCrearCuenta.setOnClickListener { crearCuenta() }
         registerForContextMenu(listView)
+    }
+
+    private fun actualizarListaCuentas() {
+        cuentas.clear()
+        cuentas.addAll(BaseDeDatos.tablaBanco!!.consultarCuentasPorBanco(banco!!.id))
+        banco!!.cuentas = cuentas
+        adaptador?.notifyDataSetChanged()
     }
 
     override fun onCreateContextMenu(
@@ -70,7 +77,8 @@ class CuentaCRUD : AppCompatActivity() {
         //obtener id
         val info = menuInfo as AdapterView.AdapterContextMenuInfo
         val posicion = info.position
-        posicionCuentaSeleccionado = posicion
+        val cuentaSeleccionada = adaptador!!.getItem(posicion)
+        idCuentaSeleccionado = cuentaSeleccionada!!.numeroCuenta
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -126,11 +134,14 @@ class CuentaCRUD : AppCompatActivity() {
                 try {
                     val cantidadATransferir = transferencia.text.toString().toDouble()
                     val numeroCuentaTransferir = cuentaDestino.text.toString().toInt()
+                    val cuentaTransferente = banco!!.obtenerCuentaPorId(idCuentaSeleccionado)
+                    val cuentaDestinoTranferencia = banco!!.obtenerCuentaPorId(numeroCuentaTransferir)
 
-                    val cuentaDestinoTranferencia = banco.obtenerCuentaPorId(numeroCuentaTransferir)
-
-                    banco.transferir(banco.obtenerCuentas()[posicionCuentaSeleccionado].numeroCuenta,cuentaDestinoTranferencia.obtenerNumeroCuenta(),cantidadATransferir)
-                    adaptador?.notifyDataSetChanged()
+                    banco!!.transferir(cuentaTransferente.numeroCuenta,cuentaDestinoTranferencia.obtenerNumeroCuenta(),cantidadATransferir)
+                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
+                    BaseDeDatos.tablaBanco!!.actualizarCuenta(cuentaTransferente.numeroCuenta,cuentaTransferente.fondo,cuentaTransferente.habilitada,cuentaTransferente.fechaApertura,cuentaTransferente.propietario,banco!!.id)
+                    BaseDeDatos.tablaBanco!!.actualizarCuenta(cuentaDestinoTranferencia.numeroCuenta,cuentaDestinoTranferencia.fondo,cuentaDestinoTranferencia.habilitada,cuentaDestinoTranferencia.fechaApertura,cuentaDestinoTranferencia.propietario,banco!!.id)
+                    actualizarListaCuentas()
                     mostrarSnackbar("Transferencia realizado con éxito, se han descontado $${cantidadATransferir}...")
                 } catch (e: Exception) {
                     mostrarSnackbar("Ha ocurrido un error: ${e.message}")
@@ -161,8 +172,12 @@ class CuentaCRUD : AppCompatActivity() {
             DialogInterface.OnClickListener { dialog, which ->
                 try {
                     val cantidadARetirar = editText.text.toString().toDouble()
-                    banco.retirarDeCuenta(banco.obtenerCuentas()[posicionCuentaSeleccionado].obtenerNumeroCuenta(),cantidadARetirar)
-                    adaptador?.notifyDataSetChanged()
+                    val cuenta = banco!!.obtenerCuentaPorId(idCuentaSeleccionado)
+                    banco!!.retirarDeCuenta(cuenta.obtenerNumeroCuenta(),cantidadARetirar)
+
+                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
+                    BaseDeDatos.tablaBanco!!.actualizarCuenta(cuenta.numeroCuenta,cuenta.fondo,cuenta.habilitada,cuenta.fechaApertura,cuenta.propietario,banco!!.id)
+                    actualizarListaCuentas()
                     mostrarSnackbar("Retiro realizado con éxito, se han descontado $${cantidadARetirar}...")
                 } catch (e: Exception) {
                     mostrarSnackbar("Ha ocurrido un error: ${e.message}")
@@ -193,7 +208,11 @@ class CuentaCRUD : AppCompatActivity() {
             DialogInterface.OnClickListener { dialog, which ->
                 try {
                     val cantidadADepositar = editText.text.toString().toDouble()
-                    banco.depositarEnCuenta(banco.obtenerCuentas()[posicionCuentaSeleccionado].obtenerNumeroCuenta(),cantidadADepositar)
+                    val cuenta = banco!!.obtenerCuentaPorId(idCuentaSeleccionado)
+                    banco!!.depositarEnCuenta(cuenta.obtenerNumeroCuenta(),cantidadADepositar)
+
+                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
+                    BaseDeDatos.tablaBanco!!.actualizarCuenta(cuenta.numeroCuenta,cuenta.fondo,cuenta.habilitada,cuenta.fechaApertura,cuenta.propietario,banco!!.id)
                     adaptador?.notifyDataSetChanged()
                     mostrarSnackbar("Deposito realizado con éxito, se han agregado $${cantidadADepositar}...")
                 } catch (e: Exception) {
@@ -220,9 +239,10 @@ class CuentaCRUD : AppCompatActivity() {
             "Aceptar",
             DialogInterface.OnClickListener { dialog, which ->
                 try {
-                    val eliminado: Cuenta = banco.obtenerCuentas().removeAt(posicionCuentaSeleccionado)
-                    adaptador?.notifyDataSetChanged()
+                    val eliminado: Cuenta = banco!!.obtenerCuentaPorId(idCuentaSeleccionado)
 
+                    BaseDeDatos.tablaBanco!!.eliminarCuenta(eliminado.numeroCuenta,banco!!.id)
+                    actualizarListaCuentas()
                     mostrarSnackbar("Se ha eliminado la siguiente cuenta con éxito: \n${eliminado}")
                 } catch (e: Exception) {
                     mostrarSnackbar("Ha ocurrido un error: ${e.message}")
@@ -253,8 +273,11 @@ class CuentaCRUD : AppCompatActivity() {
             DialogInterface.OnClickListener { dialog, which ->
                 val nombrePropietario = editText.text.toString()
                 try {
-                    banco.crearCuenta(nombrePropietario)
-                    adaptador?.notifyDataSetChanged()
+                    val numeroCuenta = banco!!.crearCuenta(nombrePropietario)
+                    val cuenta = banco!!.obtenerCuentaPorId(numeroCuenta)
+
+                    BaseDeDatos.tablaBanco!!.crearCuenta(cuenta.numeroCuenta,cuenta.fondo,cuenta.habilitada,cuenta.fechaApertura,cuenta.propietario,banco!!.id)
+                    actualizarListaCuentas()
                     mostrarSnackbar("Cuenta creada con éxito a nombre de $nombrePropietario")
                 } catch (e: Exception) {
                     mostrarSnackbar("Ha ocurrido un error: ${e.message}")
@@ -285,9 +308,11 @@ class CuentaCRUD : AppCompatActivity() {
             DialogInterface.OnClickListener { dialog, which ->
                 val nuevoNombrePropietario = editText.text.toString()
                 try {
-                    var cuenta = banco.cuentas[posicionCuentaSeleccionado]
+                    var cuenta = banco!!.obtenerCuentaPorId(idCuentaSeleccionado)
                     cuenta.actualizarNombrePropietario(nuevoNombrePropietario)
-                    adaptador?.notifyDataSetChanged()
+
+                    BaseDeDatos.tablaBanco!!.actualizarCuenta(cuenta.numeroCuenta,cuenta.fondo,cuenta.habilitada,cuenta.fechaApertura,cuenta.propietario,banco!!.id)
+                    actualizarListaCuentas()
                     mostrarSnackbar("Cuenta actualizada a nombre de $nuevoNombrePropietario")
                 } catch (e: Exception) {
                     mostrarSnackbar("Ha ocurrido un error: ${e.message}")
@@ -311,5 +336,9 @@ class CuentaCRUD : AppCompatActivity() {
             Snackbar.LENGTH_SHORT
         )
         snack.show()
+    }
+
+    private fun recuperarNumero(enOperacion: Boolean): Int {
+        return if (enOperacion) 1 else 0
     }
 }

@@ -10,14 +10,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.appmanejobanco_cuenta.BaseDatosMemoria
+import com.example.appmanejobanco_cuenta.Banco
 import com.example.appmanejobanco_cuenta.R
+import com.example.appmanejobanco_cuenta.basedatos.BaseDeDatos
 import com.google.android.material.snackbar.Snackbar
 
 class EditarBanco : AppCompatActivity() {
-    val bancos = BaseDatosMemoria.arregloBancos
     var multiplicador = 1
-    var banco = bancos[0]
+    var banco:Banco? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +30,10 @@ class EditarBanco : AppCompatActivity() {
         }
 
         val idBanco = intent.getIntExtra("idBanco",0)
-        banco = bancos[idBanco]
+        banco = BaseDeDatos.tablaBanco!!.consultarBancoPorId(idBanco)
 
         val nombreBanco = findViewById<EditText>(R.id.input_nuevo_nombre_banco)
-        nombreBanco.setText(banco.nombre)
+        nombreBanco.setText(banco!!.nombre)
 
         val numeroAccionistas = findViewById<EditText>(R.id.input_cambiar_numero_accionistas_banco)
         numeroAccionistas.visibility = View.INVISIBLE
@@ -70,24 +70,29 @@ class EditarBanco : AppCompatActivity() {
             val accionistas = findViewById<EditText>(R.id.input_cambiar_numero_accionistas_banco)
             if (accionistas.visibility === View.INVISIBLE) {
                 accionistas.setText("0")
-                banco.aumentarAccionista(accionistas.text.toString().toInt())
+                banco!!.aumentarAccionista(accionistas.text.toString().toInt())
             }
             if (multiplicador > 0){
                 val aumentarAccionistas = accionistas.text.toString().toInt()
-                banco.aumentarAccionista(aumentarAccionistas)
+                banco!!.aumentarAccionista(aumentarAccionistas)
             }
             if (multiplicador < 0){
                 val disminuirAccionistas = accionistas.text.toString().toInt()
-                banco.disminuirAccionista(disminuirAccionistas)
+                banco!!.disminuirAccionista(disminuirAccionistas)
             }
 
-            banco.actualizarNombre(nuevoNombreBanco.text.toString())
+            banco!!.actualizarNombre(nuevoNombreBanco.text.toString())
 
+            BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
             setResult(Activity.RESULT_OK)
             finish()
         } catch (e: Exception) {
             mostrarSnackbar("Ha ocurrido un error: ${e.message}")
         }
+    }
+
+    private fun recuperarNumero(enOperacion: Boolean): Int {
+        return if (enOperacion) 1 else 0
     }
 
     fun mostrarSnackbar (texto:String){

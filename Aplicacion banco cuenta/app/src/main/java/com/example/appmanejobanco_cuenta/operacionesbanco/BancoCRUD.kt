@@ -17,14 +17,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.appmanejobanco_cuenta.Banco
-import com.example.appmanejobanco_cuenta.BaseDatosMemoria
 import com.example.appmanejobanco_cuenta.R
+import com.example.appmanejobanco_cuenta.basedatos.BaseDeDatos
 import com.example.appmanejobanco_cuenta.operacionescuenta.CuentaCRUD
 import com.google.android.material.snackbar.Snackbar
 
 class BancoCRUD : AppCompatActivity() {
-    val bancos = BaseDatosMemoria.arregloBancos
-    var posicionItemSeleccionado = -1
+    var bancos = arrayListOf<Banco>()
+    var idSeleccionado = -1
     var adaptador: ArrayAdapter<Banco>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,14 +41,20 @@ class BancoCRUD : AppCompatActivity() {
         adaptador = ArrayAdapter(
         this,
         android.R.layout.simple_list_item_1,
-        bancos
+            bancos
         )
         listView.adapter = adaptador
-        adaptador?.notifyDataSetChanged()
+        actualizarListaBancos()
 
         val botonCrearBanco = findViewById<Button>(R.id.btn_crear_banco)
         botonCrearBanco.setOnClickListener { aniadirBanco() }
         registerForContextMenu(listView)
+    }
+
+    private fun actualizarListaBancos() {
+        bancos.clear()
+        bancos.addAll(BaseDeDatos.tablaBanco!!.consultarBancos())
+        adaptador?.notifyDataSetChanged()
     }
 
     override fun onCreateContextMenu(
@@ -63,7 +69,8 @@ class BancoCRUD : AppCompatActivity() {
         //obtener id
         val info = menuInfo as AdapterView.AdapterContextMenuInfo
         val posicion = info.position
-        posicionItemSeleccionado = posicion
+        val bancoSeleccionado = adaptador!!.getItem(posicion)
+        idSeleccionado = bancoSeleccionado!!.id
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -80,9 +87,9 @@ class BancoCRUD : AppCompatActivity() {
 
             R.id.utilizar_cuenta_bancaria -> {
                 val intent = Intent(this, CuentaCRUD::class.java)
-                intent.putExtra("idBanco",posicionItemSeleccionado)
+                intent.putExtra("idBanco",idSeleccionado)
                 startActivity(intent)
-                adaptador?.notifyDataSetChanged()
+                actualizarListaBancos()
                 return true
             }
 
@@ -92,7 +99,7 @@ class BancoCRUD : AppCompatActivity() {
 
     private fun editarBanco() {
         val intent = Intent(this, EditarBanco::class.java)
-        intent.putExtra("idBanco",posicionItemSeleccionado)
+        intent.putExtra("idBanco",idSeleccionado)
         startActivityForResult(intent,2)
     }
 
@@ -114,10 +121,9 @@ class BancoCRUD : AppCompatActivity() {
     }
 
     private fun eliminarBanco() {
-        val eliminado: Banco = bancos.removeAt(posicionItemSeleccionado)
-        adaptador?.notifyDataSetChanged()
-        mostrarSnackbar("Se ha eliminado el siguiente banco con éxito: \n${eliminado.nombre}")
-
+        BaseDeDatos.tablaBanco!!.eliminarBanco(idSeleccionado)
+        actualizarListaBancos()
+        mostrarSnackbar("Se ha eliminado el banco con éxito")
     }
 
     fun aniadirBanco() {
@@ -129,11 +135,11 @@ class BancoCRUD : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         // Verificar que el código de solicitud y el resultado sean correctos
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            adaptador?.notifyDataSetChanged()
+            actualizarListaBancos()
             mostrarSnackbar("Se ha creado con éxito el banco")
         }
         if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-            adaptador?.notifyDataSetChanged()
+            actualizarListaBancos()
             mostrarSnackbar("Se ha editado con éxito el banco")
         }
     }
