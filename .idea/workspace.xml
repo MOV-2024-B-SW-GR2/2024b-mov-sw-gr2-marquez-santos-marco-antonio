@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="551b6afd-5fcb-4bb9-9487-ed6c76ccba0d" name="Changes" comment="Actualizacion clase 30-01-2025" />
+    <list default="true" id="551b6afd-5fcb-4bb9-9487-ed6c76ccba0d" name="Changes" comment="Examen 02 bimestre" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,7 +85,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738251006992</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Examen 02 bimestre">
+      <option name="closed" value="true" />
+      <created>1739028296567</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1739028296567</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -103,6 +111,7 @@
     <MESSAGE value="Deber 01-II Bimestre" />
     <MESSAGE value="Deber 02-II Bimestre" />
     <MESSAGE value="Actualizacion clase 30-01-2025" />
-    <option name="LAST_COMMIT_MESSAGE" value="Actualizacion clase 30-01-2025" />
+    <MESSAGE value="Examen 02 bimestre" />
+    <option name="LAST_COMMIT_MESSAGE" value="Examen 02 bimestre" />
   </component>
 </project>
