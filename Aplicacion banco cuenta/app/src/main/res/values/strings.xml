@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">App manejo banco-cuenta</string>
+    <string name="title_activity_mapa_place_holder">MapaPlaceHolder</string>
 </resources>

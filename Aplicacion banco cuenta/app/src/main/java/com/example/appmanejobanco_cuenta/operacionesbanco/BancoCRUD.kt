@@ -19,12 +19,15 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.appmanejobanco_cuenta.Banco
 import com.example.appmanejobanco_cuenta.R
 import com.example.appmanejobanco_cuenta.basedatos.BaseDeDatos
+import com.example.appmanejobanco_cuenta.mapa.MapaBanco
 import com.example.appmanejobanco_cuenta.operacionescuenta.CuentaCRUD
 import com.google.android.material.snackbar.Snackbar
 
 class BancoCRUD : AppCompatActivity() {
     var bancos = arrayListOf<Banco>()
     var idSeleccionado = -1
+    var latitud = 0.00
+    var longitud = 0.00
     var adaptador: ArrayAdapter<Banco>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +74,8 @@ class BancoCRUD : AppCompatActivity() {
         val posicion = info.position
         val bancoSeleccionado = adaptador!!.getItem(posicion)
         idSeleccionado = bancoSeleccionado!!.id
+        latitud = bancoSeleccionado.ubiLatitud
+        longitud = bancoSeleccionado.ubiLongitud
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -90,6 +95,14 @@ class BancoCRUD : AppCompatActivity() {
                 intent.putExtra("idBanco",idSeleccionado)
                 startActivity(intent)
                 actualizarListaBancos()
+                return true
+            }
+
+            R.id.ver_ubicacion-> {
+                val intent = Intent(this, MapaBanco::class.java)
+                intent.putExtra("latitud",latitud)
+                intent.putExtra("longitud",longitud)
+                startActivity(intent)
                 return true
             }
 

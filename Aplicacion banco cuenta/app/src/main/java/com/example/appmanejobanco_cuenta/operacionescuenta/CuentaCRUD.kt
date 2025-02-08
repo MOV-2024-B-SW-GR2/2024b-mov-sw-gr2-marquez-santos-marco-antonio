@@ -138,7 +138,7 @@ class CuentaCRUD : AppCompatActivity() {
                     val cuentaDestinoTranferencia = banco!!.obtenerCuentaPorId(numeroCuentaTransferir)
 
                     banco!!.transferir(cuentaTransferente.numeroCuenta,cuentaDestinoTranferencia.obtenerNumeroCuenta(),cantidadATransferir)
-                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
+                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion),banco!!.ubiLatitud,banco!!.ubiLongitud)
                     BaseDeDatos.tablaBanco!!.actualizarCuenta(cuentaTransferente.numeroCuenta,cuentaTransferente.fondo,cuentaTransferente.habilitada,cuentaTransferente.fechaApertura,cuentaTransferente.propietario,banco!!.id)
                     BaseDeDatos.tablaBanco!!.actualizarCuenta(cuentaDestinoTranferencia.numeroCuenta,cuentaDestinoTranferencia.fondo,cuentaDestinoTranferencia.habilitada,cuentaDestinoTranferencia.fechaApertura,cuentaDestinoTranferencia.propietario,banco!!.id)
                     actualizarListaCuentas()
@@ -175,7 +175,7 @@ class CuentaCRUD : AppCompatActivity() {
                     val cuenta = banco!!.obtenerCuentaPorId(idCuentaSeleccionado)
                     banco!!.retirarDeCuenta(cuenta.obtenerNumeroCuenta(),cantidadARetirar)
 
-                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
+                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion),banco!!.ubiLatitud,banco!!.ubiLongitud)
                     BaseDeDatos.tablaBanco!!.actualizarCuenta(cuenta.numeroCuenta,cuenta.fondo,cuenta.habilitada,cuenta.fechaApertura,cuenta.propietario,banco!!.id)
                     actualizarListaCuentas()
                     mostrarSnackbar("Retiro realizado con éxito, se han descontado $${cantidadARetirar}...")
@@ -211,7 +211,7 @@ class CuentaCRUD : AppCompatActivity() {
                     val cuenta = banco!!.obtenerCuentaPorId(idCuentaSeleccionado)
                     banco!!.depositarEnCuenta(cuenta.obtenerNumeroCuenta(),cantidadADepositar)
 
-                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
+                    BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion),banco!!.ubiLatitud,banco!!.ubiLongitud)
                     BaseDeDatos.tablaBanco!!.actualizarCuenta(cuenta.numeroCuenta,cuenta.fondo,cuenta.habilitada,cuenta.fechaApertura,cuenta.propietario,banco!!.id)
                     adaptador?.notifyDataSetChanged()
                     mostrarSnackbar("Deposito realizado con éxito, se han agregado $${cantidadADepositar}...")

@@ -23,7 +23,9 @@ class SqliteHelperBanco(
                 nombre VARCHAR(50),
                 numero_accionistas INTEGER,
                 saldo_total INTEGER,
-                esta_operando INTEGER                
+                esta_operando INTEGER,
+                latitud REAL,
+                longitud REAL
                 );        
             """.trimIndent()
         val scriptSQLcrearCuenta =
@@ -49,7 +51,9 @@ class SqliteHelperBanco(
         nombre: String,
         numero_accionistas: Int,
         saldo_total: Int,
-        esta_operando: Int
+        esta_operando: Int,
+        latitud: Double,
+        longitud: Double
     ): Boolean {
         val baseDatosEscritura = writableDatabase
         val valoresGuardar = ContentValues()
@@ -57,6 +61,8 @@ class SqliteHelperBanco(
         valoresGuardar.put("numero_accionistas", numero_accionistas)
         valoresGuardar.put("saldo_total", saldo_total)
         valoresGuardar.put("esta_operando", esta_operando)
+        valoresGuardar.put("latitud", latitud)
+        valoresGuardar.put("longitud", longitud)
         val resultadoGuardar = baseDatosEscritura
             .insert(
                 "BANCO",
@@ -85,7 +91,9 @@ class SqliteHelperBanco(
         nombre: String,
         numero_accionistas: Int,
         saldo_total: Int,
-        esta_operando: Int
+        esta_operando: Int,
+        latitud:Double,
+        longitud: Double
     ): Boolean {
         val baseDatosEscritura = writableDatabase
         val valoresActualizar = ContentValues()
@@ -93,6 +101,8 @@ class SqliteHelperBanco(
         valoresActualizar.put("numero_accionistas", numero_accionistas)
         valoresActualizar.put("saldo_total", saldo_total)
         valoresActualizar.put("esta_operando", esta_operando)
+        valoresActualizar.put("latitud", latitud)
+        valoresActualizar.put("longitud", longitud)
         val parametrosConsultaActualizar = arrayOf(id.toString())
         val resultadoActualizar = baseDatosEscritura
             .update(
@@ -126,7 +136,9 @@ class SqliteHelperBanco(
                     resultadoConsultaLectura.getInt(0),
                     resultadoConsultaLectura.getInt(2),
                     (resultadoConsultaLectura.getInt(3) / 100).toDouble(),
-                    obtenerEstado(resultadoConsultaLectura.getInt(4))
+                    obtenerEstado(resultadoConsultaLectura.getInt(4)),
+                    ubiLatitud = resultadoConsultaLectura.getDouble(5),
+                    ubiLongitud = resultadoConsultaLectura.getDouble(6)
                 )
                 arregloRespuesta.add(banco)
             } while (resultadoConsultaLectura.moveToNext())
@@ -160,7 +172,9 @@ class SqliteHelperBanco(
                     resultadoConsultaLectura.getInt(0),
                     resultadoConsultaLectura.getInt(2),
                     (resultadoConsultaLectura.getInt(3)).toDouble() / 100,
-                    obtenerEstado(resultadoConsultaLectura.getInt(4))
+                    obtenerEstado(resultadoConsultaLectura.getInt(4)),
+                    ubiLatitud = resultadoConsultaLectura.getDouble(5),
+                    ubiLongitud = resultadoConsultaLectura.getDouble(6)
                 )
                 arregloRespuesta.add(banco)
             } while (resultadoConsultaLectura.moveToNext())

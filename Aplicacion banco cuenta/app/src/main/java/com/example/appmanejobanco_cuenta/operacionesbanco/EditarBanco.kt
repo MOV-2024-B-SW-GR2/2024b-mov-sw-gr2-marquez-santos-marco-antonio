@@ -83,7 +83,7 @@ class EditarBanco : AppCompatActivity() {
 
             banco!!.actualizarNombre(nuevoNombreBanco.text.toString())
 
-            BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion))
+            BaseDeDatos.tablaBanco!!.actualizarBanco(banco!!.id,banco!!.nombre,banco!!.numeroAccionistas,(banco!!.saldoTotal*100).toInt(),recuperarNumero(banco!!.enOperacion),banco!!.ubiLatitud,banco!!.ubiLongitud)
             setResult(Activity.RESULT_OK)
             finish()
         } catch (e: Exception) {

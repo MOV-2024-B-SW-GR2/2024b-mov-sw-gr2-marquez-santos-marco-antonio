@@ -7,6 +7,8 @@ class Banco(
     var saldoTotal: Double,
     var enOperacion: Boolean = true,
     var cuentas: ArrayList<Cuenta> = arrayListOf<Cuenta>(),
+    val ubiLatitud: Double,
+    val ubiLongitud: Double,
     val VALOR_MINIMO_PARA_OPERAR: Double = 1000.00,
     val VALOR_MINIMO_DE_ACCIONISTAS: Int = 2
 ) {

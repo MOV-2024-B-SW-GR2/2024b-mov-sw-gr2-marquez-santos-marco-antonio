@@ -11,4 +11,7 @@
     <item
         android:id="@+id/utilizar_cuenta_bancaria"
         android:title="Usar cuentas" />
+    <item
+        android:id="@+id/ver_ubicacion"
+        android:title="Ver ubicación" />
 </menu>

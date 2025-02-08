@@ -7,16 +7,29 @@
     android:layout_height="match_parent"
     tools:context=".operacionesbanco.CrearBanco">
 
+    <EditText
+        android:id="@+id/input_saldo_inicial_banco"
+        android:layout_width="252dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:hint="Ingrese saldo inicial del banco"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/input_cambiar_numero_accionistas_banco"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/input_cambiar_numero_accionistas_banco"
+        app:layout_constraintTop_toBottomOf="@+id/input_cambiar_numero_accionistas_banco" />
+
     <Button
         android:id="@+id/btn_editar_banco_opcion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="168dp"
         android:text="Crear banco"
-        app:layout_constraintEnd_toEndOf="@+id/input_saldo_inicial_banco"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="@+id/input_saldo_inicial_banco"
-        app:layout_constraintTop_toBottomOf="@+id/input_saldo_inicial_banco" />
+        app:layout_constraintEnd_toEndOf="@+id/input_latitud_banco"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="@+id/input_latitud_banco"
+        app:layout_constraintTop_toBottomOf="@+id/input_latitud_banco" />
 
     <TextView
         android:id="@+id/textView2"
@@ -56,12 +69,25 @@
         app:layout_constraintTop_toBottomOf="@+id/input_nuevo_nombre_banco" />
 
     <EditText
-        android:id="@+id/input_saldo_inicial_banco"
+        android:id="@+id/input_latitud_banco"
         android:layout_width="252dp"
         android:layout_height="42dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="100dp"
         android:ems="10"
-        android:hint="Ingrese saldo inicial del banco"
+        android:hint="Ingrese ubicacion (latitud) del banco"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/input_cambiar_numero_accionistas_banco"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/input_cambiar_numero_accionistas_banco"
+        app:layout_constraintTop_toBottomOf="@+id/input_cambiar_numero_accionistas_banco" />
+
+    <EditText
+        android:id="@+id/input_longitud_banco"
+        android:layout_width="252dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="172dp"
+        android:ems="10"
+        android:hint="Ingrese ubicación (longitud) del banco"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="@+id/input_cambiar_numero_accionistas_banco"
         app:layout_constraintHorizontal_bias="0.0"

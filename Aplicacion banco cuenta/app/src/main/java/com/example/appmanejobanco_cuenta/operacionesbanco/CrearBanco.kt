@@ -1,7 +1,6 @@
 package com.example.appmanejobanco_cuenta.operacionesbanco
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -32,14 +31,19 @@ class CrearBanco : AppCompatActivity() {
                 val nombre = findViewById<EditText>(R.id.input_nuevo_nombre_banco)
                 val numeroAccionistas = findViewById<EditText>(R.id.input_cambiar_numero_accionistas_banco)
                 val saldoInicial = findViewById<EditText>(R.id.input_saldo_inicial_banco)
+                val latitud = findViewById<EditText>(R.id.input_latitud_banco)
+                val longitud = findViewById<EditText>(R.id.input_longitud_banco)
 
                 val banco: Banco = Banco (
                     nombre.text.toString(),
                     1,
                     numeroAccionistas.text.toString().toInt(),
-                    saldoInicial.text.toString().toDouble())
+                    saldoInicial.text.toString().toDouble(),
+                    ubiLatitud = latitud.text.toString().toDouble(),
+                    ubiLongitud = longitud.text.toString().toDouble()
+                )
 
-                BaseDeDatos.tablaBanco!!.crearBanco(banco.nombre,banco.numeroAccionistas,(banco.saldoTotal*100).toInt(),recuperarNumero(banco.enOperacion))
+                BaseDeDatos.tablaBanco!!.crearBanco(banco.nombre,banco.numeroAccionistas,(banco.saldoTotal*100).toInt(),recuperarNumero(banco.enOperacion),banco.ubiLatitud,banco.ubiLongitud)
                 setResult(Activity.RESULT_OK)
                 finish()
             } catch (e:Exception){
